@@ -4,6 +4,7 @@ const app = express()
 const port = process.env.PORT || 3000;
 const mysql = require('mysql2');
 const db = require('./models');
+const router = require('./routes/index');
 
 db.sequelize.sync({
     force: true
@@ -13,18 +14,9 @@ db.sequelize.sync({
     console.log(err);
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(express.json());
 
-app.get('/users', (req, res) => {
-    db.User.findAll().then((users) => {
-        res.json(users);
-    }).catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-    });
-});
+app.use(router)
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
