@@ -1,12 +1,11 @@
 
 const express = require('express');
-const { getAllUsers } = require('../controllers/users');
-const router = express.Router()
+const { getUser, login, register } = require('../controllers/users');
+const router = express.Router();
+const verifyToken = require('../middleware/VerifyToken');
 
-router.get('/', (req, res) => {
-    res.send('Hello World!')
-});
-
-router.get('/users', getAllUsers);
+router.post('/api/login', login);
+router.post('/api/register', register);
+router.get('/api/user', verifyToken, getUser);
 
 module.exports = router
