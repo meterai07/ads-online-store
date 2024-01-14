@@ -10,6 +10,7 @@ const login = async (req, res) => {
                 email,
             },
         });
+
         if (user) {
             const isPasswordMatch = await bcrypt.compare(password, user.password);
             if (isPasswordMatch) {
@@ -18,7 +19,7 @@ const login = async (req, res) => {
                     email: user.email,
                     role: user.role,
                 }, process.env.JWT_SECRET, {
-                    expiresIn: '1m',
+                    expiresIn: '1800s', // 30 minutes
                 });
 
                 return res.status(200).json({
@@ -73,7 +74,7 @@ const register = async (req, res) => {
     }
 }
 
-const getUser = async (req, res) => {
+const getUserDetails = async (req, res) => {
     try {
         const user = await models.Users.findByPk(req.user.id);
         return res.status(200).json({
@@ -86,4 +87,4 @@ const getUser = async (req, res) => {
     }
 }
 
-module.exports = { getUser, login, register };
+module.exports = { getUserDetails, login, register };
